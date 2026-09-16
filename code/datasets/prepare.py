@@ -35,6 +35,7 @@ def prepare(config_path: Path) -> tuple[Path, Path]:
         raise ValueError(f"Dataset schema mismatch. Missing columns: {missing}")
     df = df[KEEP_COLUMNS].copy()
     df = df.drop_duplicates(subset=["App ID"], keep="last")
+    # Keep the same cleaned population used by the ablation experiment.
     df = df[df["Short Description"].notna() & df["Genre"].notna()]
 
     for column in ["Price", "Required Age", "Positive Reviews", "Negative Reviews"]:

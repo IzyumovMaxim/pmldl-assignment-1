@@ -40,10 +40,6 @@ st.set_page_config(page_title="Steam Success Predictor", page_icon="🎮")
 st.title("🎮 Steam Pre-launch Success Predictor")
 st.caption("Оценка вероятности получить ≥100 отзывов при доле положительных отзывов ≥80%.")
 
-description = st.text_area(
-    "Краткое описание",
-    "A cooperative action game where players explore a mysterious world and fight challenging bosses.",
-)
 genre = st.multiselect(
     "Жанры", GENRES, default=["Action", "Adventure", "Indie"],
     accept_new_options=True, help="Можно найти пункт поиском или добавить собственный.",
@@ -71,7 +67,6 @@ if st.button("Оценить успех", type="primary"):
         st.warning("Выберите хотя бы один жанр.")
         st.stop()
     payload = {
-        "short_description": description,
         "genre": ";".join(genre),
         "tags": ";".join(tags),
         "categories": ";".join(categories),

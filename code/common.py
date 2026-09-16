@@ -8,7 +8,6 @@ from typing import Any
 import pandas as pd
 
 RAW_INPUT_COLUMNS = [
-    "Short Description",
     "Genre",
     "Tags",
     "Categories",
@@ -24,7 +23,6 @@ MODEL_COLUMNS = [
     "text",
     "price",
     "required_age",
-    "description_length",
     "genre_count",
     "tag_count",
     "category_count",
@@ -54,7 +52,7 @@ def build_features(frame: pd.DataFrame) -> pd.DataFrame:
             df[column] = ""
 
     text_frame = df[
-        ["Short Description", "Genre", "Tags", "Categories", "Developer", "Publisher"]
+        ["Genre", "Tags", "Categories", "Developer", "Publisher"]
     ].fillna("").astype(str).copy()
     # Tag vote counts are observed only after launch, so retain tag names only.
     text_frame["Tags"] = text_frame["Tags"].str.replace(r":\s*\d+", "", regex=True)
@@ -69,7 +67,6 @@ def build_features(frame: pd.DataFrame) -> pd.DataFrame:
     features["text"] = text.str.replace(r"\s+", " ", regex=True).str.strip()
     features["price"] = _to_number(df["Price"]).fillna(0.0).clip(lower=0.0)
     features["required_age"] = _to_number(df["Required Age"]).fillna(0.0).clip(lower=0.0, upper=100.0)
-    features["description_length"] = df["Short Description"].fillna("").astype(str).str.len()
     features["genre_count"] = df["Genre"].map(_count_items)
     features["tag_count"] = df["Tags"].map(_count_items)
     features["category_count"] = df["Categories"].map(_count_items)

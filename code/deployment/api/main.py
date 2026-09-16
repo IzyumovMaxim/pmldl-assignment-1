@@ -28,7 +28,6 @@ app = FastAPI(title="Steam Pre-launch Success API", version="1.0.0", lifespan=li
 
 
 class GameInput(BaseModel):
-    short_description: str = Field(min_length=5, max_length=2000)
     genre: str = Field(min_length=1, examples=["Action;Indie"])
     tags: str = Field(default="", examples=["Action;Multiplayer;Competitive"])
     categories: str = Field(default="", examples=["Single-player;Steam Achievements"])
@@ -50,7 +49,6 @@ def predict(game: GameInput) -> dict:
     if "model" not in package:
         raise HTTPException(status_code=503, detail="Model is not loaded")
     row = pd.DataFrame([{
-        "Short Description": game.short_description,
         "Genre": game.genre,
         "Tags": game.tags,
         "Categories": game.categories,

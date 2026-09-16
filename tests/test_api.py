@@ -16,7 +16,6 @@ def test_prediction_contract():
     })
     client = TestClient(main.app)
     response = client.post("/predict", json={
-        "short_description": "A sufficiently long game description",
         "genre": "Action",
         "tags": "Co-op",
         "categories": "Single-player",
