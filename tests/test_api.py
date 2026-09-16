@@ -20,6 +20,8 @@ def test_prediction_contract():
         "genre": "Action",
         "tags": "Co-op",
         "categories": "Single-player",
+        "developer": "Example Studio",
+        "publisher": "Example Publisher",
         "price": 10,
         "platforms": ["windows"],
         "languages": ["English"],

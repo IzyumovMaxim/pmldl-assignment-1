@@ -12,6 +12,8 @@ RAW_INPUT_COLUMNS = [
     "Genre",
     "Tags",
     "Categories",
+    "Developer",
+    "Publisher",
     "Price",
     "Platforms",
     "Languages",
@@ -51,9 +53,15 @@ def build_features(frame: pd.DataFrame) -> pd.DataFrame:
         if column not in df:
             df[column] = ""
 
-    text_frame = df[["Short Description", "Genre", "Tags", "Categories"]].fillna("").astype(str).copy()
+    text_frame = df[
+        ["Short Description", "Genre", "Tags", "Categories", "Developer", "Publisher"]
+    ].fillna("").astype(str).copy()
     # Tag vote counts are observed only after launch, so retain tag names only.
     text_frame["Tags"] = text_frame["Tags"].str.replace(r":\s*\d+", "", regex=True)
+    developer = text_frame["Developer"].str.lower().str.replace(r"[^a-z0-9]+", "_", regex=True).str.strip("_")
+    publisher = text_frame["Publisher"].str.lower().str.replace(r"[^a-z0-9]+", "_", regex=True).str.strip("_")
+    text_frame["Developer"] = "developer_" + developer
+    text_frame["Publisher"] = "publisher_" + publisher
     text = text_frame.agg(" ".join, axis=1)
     platforms = df["Platforms"].fillna("").astype(str).str.lower()
 

@@ -9,6 +9,8 @@ def test_build_features_has_stable_schema():
         "Genre": "Action;Adventure",
         "Tags": "Co-op;Space",
         "Categories": "Multi-player;Steam Achievements",
+        "Developer": "Example Studio",
+        "Publisher": "Example Publisher",
         "Price": 19.99,
         "Platforms": "windows;linux",
         "Languages": "English;Russian",
@@ -22,5 +24,5 @@ def test_build_features_has_stable_schema():
     assert "5426" not in build_features(pd.DataFrame([{
         "Short Description": "test", "Genre": "Action", "Tags": "Action: 5426; Co-op: 42",
         "Categories": "", "Price": 10, "Platforms": "windows", "Languages": "English",
-        "Required Age": 0,
+        "Required Age": 0, "Developer": "Studio", "Publisher": "Publisher",
     }])).loc[0, "text"]

@@ -5,12 +5,12 @@ stages:
     deps:
     - path: code/common.py
       hash: md5
-      md5: d42c02e89f4eff764c3851e75736a50c
-      size: 2442
+      md5: 9333a1d5bda05daf0c9f012cca672b32
+      size: 2848
     - path: code/datasets/prepare.py
       hash: md5
-      md5: dab8fe3d873bc0a25682c9b872a63544
-      size: 3196
+      md5: 29fe2cf70410b3fda4dbbcee8281e241
+      size: 3222
     - path: data/raw/steam_games.csv
       hash: md5
       md5: f8ee28188f71fb1b592b532f5a81b8d2
@@ -29,31 +29,31 @@ stages:
     outs:
     - path: data/processed/test.csv
       hash: md5
-      md5: 82e5bbcaec69a602b49cadfb2baebbbc
-      size: 6248797
+      md5: 51d5834c2153bdb416e32b00914e4ec8
+      size: 6597875
     - path: data/processed/train.csv
       hash: md5
-      md5: 6b96f7eecf07125129dc5a673de715f6
-      size: 24957908
+      md5: 327d7580e2f0202f1eb66bc0ddb6cd7b
+      size: 26360835
   train:
     cmd: python -m code.models.train --config params.yaml
     deps:
     - path: code/common.py
       hash: md5
-      md5: d42c02e89f4eff764c3851e75736a50c
-      size: 2442
+      md5: 9333a1d5bda05daf0c9f012cca672b32
+      size: 2848
     - path: code/models/train.py
       hash: md5
-      md5: dd6b03d8ffdc2718f3bd84ff22cdb7f7
-      size: 4378
+      md5: 99eb8298004b79091bfbc98d317d3454
+      size: 5794
     - path: data/processed/test.csv
       hash: md5
-      md5: 82e5bbcaec69a602b49cadfb2baebbbc
-      size: 6248797
+      md5: 51d5834c2153bdb416e32b00914e4ec8
+      size: 6597875
     - path: data/processed/train.csv
       hash: md5
-      md5: 6b96f7eecf07125129dc5a673de715f6
-      size: 24957908
+      md5: 327d7580e2f0202f1eb66bc0ddb6cd7b
+      size: 26360835
     params:
       params.yaml:
         data.min_positive_ratio: 0.8
@@ -66,14 +66,19 @@ stages:
           metrics_path: models/metrics.json
           max_text_features: 12000
           min_df: 2
-          c: 1.0
-          max_iter: 1000
+          n_estimators: 500
+          learning_rate: 0.05
+          num_leaves: 31
+          min_child_samples: 30
+          subsample: 0.85
+          colsample_bytree: 0.8
+          reg_lambda: 1.0
     outs:
     - path: models/metrics.json
       hash: md5
-      md5: f39d80b1eb28bdfd5e548cbe416eb333
-      size: 311
+      md5: ca341c573e923449bf57a355c948e6cb
+      size: 422
     - path: models/steam_success_model.joblib
       hash: md5
-      md5: 54b94f399cde5a2dd757fe99091896e2
-      size: 773083
+      md5: 71d63d60b2469d7500665b6ac53318cc
+      size: 7662486

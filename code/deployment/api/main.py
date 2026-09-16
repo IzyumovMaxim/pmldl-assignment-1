@@ -32,6 +32,8 @@ class GameInput(BaseModel):
     genre: str = Field(min_length=1, examples=["Action;Indie"])
     tags: str = Field(default="", examples=["Action;Multiplayer;Competitive"])
     categories: str = Field(default="", examples=["Single-player;Steam Achievements"])
+    developer: str = Field(default="Unknown developer", max_length=300)
+    publisher: str = Field(default="Self-published", max_length=300)
     price: float = Field(ge=0, le=1000)
     platforms: list[str] = Field(default=["windows"])
     languages: list[str] = Field(default=["English"])
@@ -52,6 +54,8 @@ def predict(game: GameInput) -> dict:
         "Genre": game.genre,
         "Tags": game.tags,
         "Categories": game.categories,
+        "Developer": game.developer,
+        "Publisher": game.publisher,
         "Price": game.price,
         "Platforms": ";".join(game.platforms),
         "Languages": ";".join(game.languages),
@@ -66,4 +70,3 @@ def predict(game: GameInput) -> dict:
         "threshold": threshold,
         "target_definition": package["metadata"]["target_definition"],
     }
-

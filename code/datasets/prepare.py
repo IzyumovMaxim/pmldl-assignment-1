@@ -10,7 +10,7 @@ import yaml
 from sklearn.model_selection import train_test_split
 
 KEEP_COLUMNS = [
-    "App ID", "Name", "Short Description", "Genre", "Tags", "Categories",
+    "App ID", "Name", "Short Description", "Developer", "Publisher", "Genre", "Tags", "Categories",
     "Price", "Platforms", "Languages", "Required Age", "Positive Reviews",
     "Negative Reviews",
 ]

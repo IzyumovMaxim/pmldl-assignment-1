@@ -56,6 +56,8 @@ categories = st.multiselect(
     "Категории", CATEGORIES, default=["Single-player", "Online Co-op", "Steam Achievements"],
     accept_new_options=True,
 )
+developer = st.text_input("Разработчик", "Independent Studio")
+publisher = st.text_input("Издатель", "Self-published")
 price = st.number_input("Стартовая цена, USD", min_value=0.0, max_value=1000.0, value=19.99, step=1.0)
 platforms = st.multiselect("Платформы", ["windows", "mac", "linux"], default=["windows"])
 languages = st.multiselect(
@@ -73,6 +75,8 @@ if st.button("Оценить успех", type="primary"):
         "genre": ";".join(genre),
         "tags": ";".join(tags),
         "categories": ";".join(categories),
+        "developer": developer,
+        "publisher": publisher,
         "price": price,
         "platforms": platforms,
         "languages": languages,
