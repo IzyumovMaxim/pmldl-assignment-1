@@ -1,0 +1,11 @@
+.git
+.dvc/cache
+.dvc/site-cache
+.venv
+data/raw
+data/processed
+mlruns
+logs
+__pycache__
+*.pyc
+

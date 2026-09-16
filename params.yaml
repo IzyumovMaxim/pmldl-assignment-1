@@ -1,0 +1,20 @@
+data:
+  raw_path: data/raw/steam_games.csv
+  train_path: data/processed/train.csv
+  test_path: data/processed/test.csv
+  test_size: 0.2
+  random_state: 42
+  min_reviews: 100
+  min_positive_ratio: 0.8
+  max_price_quantile: 0.995
+model:
+  artifact_path: models/steam_success_model.joblib
+  metrics_path: models/metrics.json
+  max_text_features: 12000
+  min_df: 2
+  c: 1.0
+  max_iter: 1000
+mlflow:
+  tracking_uri: mlruns
+  experiment_name: steam-prelaunch-success
+

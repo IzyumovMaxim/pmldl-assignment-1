@@ -1,0 +1,79 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m code.datasets.prepare --config params.yaml
+    deps:
+    - path: code/common.py
+      hash: md5
+      md5: d42c02e89f4eff764c3851e75736a50c
+      size: 2442
+    - path: code/datasets/prepare.py
+      hash: md5
+      md5: dab8fe3d873bc0a25682c9b872a63544
+      size: 3196
+    - path: data/raw/steam_games.csv
+      hash: md5
+      md5: f8ee28188f71fb1b592b532f5a81b8d2
+      size: 40209054
+    params:
+      params.yaml:
+        data:
+          raw_path: data/raw/steam_games.csv
+          train_path: data/processed/train.csv
+          test_path: data/processed/test.csv
+          test_size: 0.2
+          random_state: 42
+          min_reviews: 100
+          min_positive_ratio: 0.8
+          max_price_quantile: 0.995
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 82e5bbcaec69a602b49cadfb2baebbbc
+      size: 6248797
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 6b96f7eecf07125129dc5a673de715f6
+      size: 24957908
+  train:
+    cmd: python -m code.models.train --config params.yaml
+    deps:
+    - path: code/common.py
+      hash: md5
+      md5: d42c02e89f4eff764c3851e75736a50c
+      size: 2442
+    - path: code/models/train.py
+      hash: md5
+      md5: dd6b03d8ffdc2718f3bd84ff22cdb7f7
+      size: 4378
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 82e5bbcaec69a602b49cadfb2baebbbc
+      size: 6248797
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 6b96f7eecf07125129dc5a673de715f6
+      size: 24957908
+    params:
+      params.yaml:
+        data.min_positive_ratio: 0.8
+        data.min_reviews: 100
+        mlflow:
+          tracking_uri: mlruns
+          experiment_name: steam-prelaunch-success
+        model:
+          artifact_path: models/steam_success_model.joblib
+          metrics_path: models/metrics.json
+          max_text_features: 12000
+          min_df: 2
+          c: 1.0
+          max_iter: 1000
+    outs:
+    - path: models/metrics.json
+      hash: md5
+      md5: f39d80b1eb28bdfd5e548cbe416eb333
+      size: 311
+    - path: models/steam_success_model.joblib
+      hash: md5
+      md5: 54b94f399cde5a2dd757fe99091896e2
+      size: 773083
