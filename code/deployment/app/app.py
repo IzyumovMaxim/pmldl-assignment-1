@@ -7,6 +7,35 @@ import streamlit as st
 
 API_URL = os.getenv("API_URL", "http://api:8000")
 
+GENRES = [
+    "Action", "Adventure", "Casual", "Indie", "Massively Multiplayer",
+    "Racing", "RPG", "Simulation", "Sports", "Strategy", "Free to Play",
+    "Early Access",
+]
+TAGS = [
+    "2D", "3D", "Action", "Adventure", "Atmospheric", "Casual", "Co-op",
+    "Competitive", "Difficult", "Exploration", "Fantasy", "First-Person",
+    "Free to Play", "Funny", "Horror", "Indie", "Multiplayer", "Open World",
+    "Pixel Graphics", "Platformer", "Puzzle", "PvE", "PvP", "RPG", "Racing",
+    "Retro", "Roguelike", "Shooter", "Simulation", "Singleplayer", "Story Rich",
+    "Strategy", "Survival", "Third Person", "Turn-Based",
+]
+CATEGORIES = [
+    "Single-player", "Multi-player", "PvP", "Online PvP", "Co-op",
+    "Online Co-op", "Shared/Split Screen", "Cross-Platform Multiplayer",
+    "Steam Achievements", "Steam Trading Cards", "Steam Cloud",
+    "Full controller support", "Partial Controller Support", "Remote Play Together",
+    "Steam Workshop", "Includes level editor", "VR Supported",
+]
+LANGUAGES = [
+    "English", "Russian", "French", "German", "Spanish - Spain", "Italian",
+    "Portuguese - Brazil", "Portuguese - Portugal", "Polish", "Dutch",
+    "Turkish", "Ukrainian", "Czech", "Hungarian", "Romanian", "Swedish",
+    "Norwegian", "Danish", "Finnish", "Greek", "Japanese", "Korean",
+    "Simplified Chinese", "Traditional Chinese", "Thai", "Vietnamese",
+    "Arabic", "Hindi",
+]
+
 st.set_page_config(page_title="Steam Success Predictor", page_icon="🎮")
 st.title("🎮 Steam Pre-launch Success Predictor")
 st.caption("Оценка вероятности получить ≥100 отзывов при доле положительных отзывов ≥80%.")
@@ -15,23 +44,38 @@ description = st.text_area(
     "Краткое описание",
     "A cooperative action game where players explore a mysterious world and fight challenging bosses.",
 )
-genre = st.text_input("Жанры (через ;)", "Action;Adventure;Indie")
-tags = st.text_input("Теги (через ;)", "Action;Co-op;Multiplayer;Atmospheric")
-categories = st.text_input("Категории (через ;)", "Single-player;Online Co-op;Steam Achievements")
+genre = st.multiselect(
+    "Жанры", GENRES, default=["Action", "Adventure", "Indie"],
+    accept_new_options=True, help="Можно найти пункт поиском или добавить собственный.",
+)
+tags = st.multiselect(
+    "Теги", TAGS, default=["Action", "Co-op", "Multiplayer", "Atmospheric"],
+    accept_new_options=True,
+)
+categories = st.multiselect(
+    "Категории", CATEGORIES, default=["Single-player", "Online Co-op", "Steam Achievements"],
+    accept_new_options=True,
+)
 price = st.number_input("Стартовая цена, USD", min_value=0.0, max_value=1000.0, value=19.99, step=1.0)
 platforms = st.multiselect("Платформы", ["windows", "mac", "linux"], default=["windows"])
-languages = st.text_input("Языки (через ;)", "English;Russian")
+languages = st.multiselect(
+    "Поддерживаемые языки", LANGUAGES, default=["English", "Russian"],
+    accept_new_options=True,
+)
 required_age = st.number_input("Возрастное ограничение", min_value=0, max_value=100, value=0)
 
 if st.button("Оценить успех", type="primary"):
+    if not genre:
+        st.warning("Выберите хотя бы один жанр.")
+        st.stop()
     payload = {
         "short_description": description,
-        "genre": genre,
-        "tags": tags,
-        "categories": categories,
+        "genre": ";".join(genre),
+        "tags": ";".join(tags),
+        "categories": ";".join(categories),
         "price": price,
         "platforms": platforms,
-        "languages": [item.strip() for item in languages.split(";") if item.strip()],
+        "languages": languages,
         "required_age": required_age,
     }
     try:
@@ -48,4 +92,3 @@ if st.button("Оценить успех", type="primary"):
         st.caption(f"Целевая метка: {result['target_definition']}. Это статистическая оценка, а не гарантия.")
     except requests.RequestException as exc:
         st.error(f"API недоступен: {exc}")
-
