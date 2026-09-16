@@ -35,7 +35,6 @@ def prepare(config_path: Path) -> tuple[Path, Path]:
         raise ValueError(f"Dataset schema mismatch. Missing columns: {missing}")
     df = df[KEEP_COLUMNS].copy()
     df = df.drop_duplicates(subset=["App ID"], keep="last")
-    # Keep the same cleaned population used by the ablation experiment.
     df = df[df["Short Description"].notna() & df["Genre"].notna()]
 
     for column in ["Price", "Required Age", "Positive Reviews", "Negative Reviews"]:
@@ -43,7 +42,6 @@ def prepare(config_path: Path) -> tuple[Path, Path]:
     df[["Price", "Required Age", "Positive Reviews", "Negative Reviews"]] = df[
         ["Price", "Required Age", "Positive Reviews", "Negative Reviews"]
     ].fillna(0)
-    # Kaggle stores prices as integer cents (999 means $9.99).
     df["Price"] = df["Price"] / 100.0
     df = df[(df["Price"] >= 0) & (df["Required Age"].between(0, 100))]
     price_ceiling = df.loc[df["Price"] > 0, "Price"].quantile(float(cfg["max_price_quantile"]))
@@ -56,7 +54,6 @@ def prepare(config_path: Path) -> tuple[Path, Path]:
         & (ratio >= float(cfg["min_positive_ratio"]))
     ).astype(int)
 
-    # Post-launch variables are deliberately removed after constructing the label.
     df = df.drop(columns=["Positive Reviews", "Negative Reviews", "total_reviews"])
     train, test = train_test_split(
         df,

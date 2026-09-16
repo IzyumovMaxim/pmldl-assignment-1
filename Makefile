@@ -1,6 +1,6 @@
 PYTHON ?= python3.12
 
-.PHONY: setup download prepare train pipeline deploy test clean
+.PHONY: setup download prepare train pipeline deploy clean
 
 setup:
 	$(PYTHON) -m venv .venv
@@ -21,9 +21,6 @@ pipeline:
 
 deploy:
 	docker compose -f code/deployment/docker-compose.yml up -d --build
-
-test:
-	PYTHONPATH=. .venv/bin/python -m pytest -q
 
 clean:
 	docker compose -f code/deployment/docker-compose.yml down

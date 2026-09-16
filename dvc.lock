@@ -9,8 +9,8 @@ stages:
       size: 2682
     - path: code/datasets/prepare.py
       hash: md5
-      md5: 0378c7e3acc9daf20ad4d7dd438348e0
-      size: 3294
+      md5: dfa2a20c10b00e82f9fbab5fa1756d8e
+      size: 3076
     - path: data/raw/steam_games.csv
       hash: md5
       md5: f8ee28188f71fb1b592b532f5a81b8d2
