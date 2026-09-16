@@ -84,7 +84,6 @@ def train(config_path: Path) -> dict:
     ]
     threshold = float(candidates[int(np.argmax(validation_f1))])
 
-    # Refit on all training rows after model selection; the test set remains untouched.
     model = make_model(config["model"], scale_pos_weight)
     model.fit(x_train, y_train)
     probabilities = model.predict_proba(x_test)[:, 1]
