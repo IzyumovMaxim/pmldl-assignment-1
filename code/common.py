@@ -54,7 +54,6 @@ def build_features(frame: pd.DataFrame) -> pd.DataFrame:
     text_frame = df[
         ["Genre", "Tags", "Categories", "Developer", "Publisher"]
     ].fillna("").astype(str).copy()
-    # Tag vote counts are observed only after launch, so retain tag names only.
     text_frame["Tags"] = text_frame["Tags"].str.replace(r":\s*\d+", "", regex=True)
     developer = text_frame["Developer"].str.lower().str.replace(r"[^a-z0-9]+", "_", regex=True).str.strip("_")
     publisher = text_frame["Publisher"].str.lower().str.replace(r"[^a-z0-9]+", "_", regex=True).str.strip("_")
